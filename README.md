@@ -46,5 +46,6 @@ Install dependencies:
 
 ```bash
 pip install discord.py aiohttp python-dotenv openai
+```
 
-Meme Generation Bot is hosted on render fo use.
+Meme Generation Bot is hosted on render for use.
