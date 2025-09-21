@@ -20,7 +20,7 @@ intents.members = True
 
 bot = commands.Bot(command_prefix='!', intents=intents)
 
-secret_role = "Gamer"
+secret_role = "Meme Generation"
 
 # Store last bot message per user for !delete
 user_last_message = {}
@@ -76,6 +76,13 @@ async def poll(ctx, *, question):
 async def secret(ctx):
     await ctx.send("Welcome to the club!")
 
+
+@secret.error
+async def secret_error(ctx, error):
+    if isinstance(error, commands.MissingRole):
+        await ctx.send("You do not have permission to do that!")
+
+
 # AI Meme/GIF/Emoji Commands
 
 async def ask_llm(prompt: str) -> str:
@@ -123,6 +130,7 @@ async def generate_dalle_image(prompt: str) -> str:
 
 
 @bot.command()
+@commands.has_role(secret_role)
 async def meme(ctx, *, description):
     print('!meme command triggered')
     query = await ask_llm(f"Find a meme for: {description}")
@@ -146,6 +154,13 @@ async def meme(ctx, *, description):
         sent = await ctx.send(image_url)
 
     user_last_message[ctx.author.id] = sent
+
+@meme.error
+async def meme_error(ctx, error):
+    if isinstance(error, commands.MissingRole):
+        await ctx.send("You do not have permission to do that!")
+
+
 
 @bot.command()
 async def gif(ctx, *, description):
